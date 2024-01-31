@@ -1,10 +1,32 @@
-import 'package:chat_app/widgets/message.bubble.dart';
+import 'package:chat_app/widgets/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class ChatMessages extends StatelessWidget {
+class ChatMessages extends StatefulWidget {
   const ChatMessages({super.key});
+
+  @override
+  State<ChatMessages> createState() => _ChatMessagesState();
+}
+
+class _ChatMessagesState extends State<ChatMessages> {
+  void _setupPushNotifications() async {
+    final firebaseMessaging = FirebaseMessaging.instance;
+
+    await firebaseMessaging.requestPermission();
+
+    final token = await firebaseMessaging.getToken();
+    print(token);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setupPushNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
